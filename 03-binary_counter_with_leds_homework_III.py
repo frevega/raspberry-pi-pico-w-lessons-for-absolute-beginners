@@ -11,4 +11,7 @@ try:
                 led.value(int(iteration / 2 ** index) % 2)
             sleep(.001 if iteration < MAX_ITERATIONS -1 else 1)
 except KeyboardInterrupt:
+    for index, led in enumerate(leds):
+        led.off()
     print("See ya later, RPi Pico!")
+    
