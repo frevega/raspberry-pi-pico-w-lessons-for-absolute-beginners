@@ -1,32 +1,45 @@
 from machine import Pin
 from time import sleep
 
-leds = list(map(lambda n: Pin(n, Pin.OUT), [16, 17, 18, 19, 20, 21, 22, 26, 27, 28, 15, 14, 13, 12]))
-reversed = 1
+leds = [Pin(n, Pin.OUT) for n in [16, 17, 18, 19, 20, 21, 22, 26, 27, 28, 15, 14, 13, 12]]
+
+def animation(range: range, delay: float):
+    for i in range:
+        if i + 3 <= len(leds) -1:
+            leds[i +3].off()
+        leds[i -3].off()
+        leds[i].on()
+        sleep(delay)
+        
+def animationTwo(firstRange: range, secondRangeArgs, delay: float):
+    for i in firstRange:
+        for j in range(i, secondRangeArgs[0], secondRangeArgs[1]):
+            leds[j].on()
+            sleep(delay)
+            leds[j].off()
 
 def larsonScanner():
-    global reversed
-    for i in range(len(leds) -1, -1, -1) if reversed > 0 else range(len(leds)):
-        if i + 1 <= len(leds) -1:
-            leds[i +1].off()
-        leds[i -1].off()
-        leds[i].on()
-        sleep(.07)
-    reversed *= -1
-    
-def other():
-    global reversed
-    for i in range(int(len(leds) / 2) -1, -1, -1) if reversed > 0 else range(int(len(leds) / 2)):
-        leds[i].toggle()
-        sleep(.07)
-    for i in range(int(len(leds) / 2) -1, -8, -1) if reversed > 0 else range(7, int(len(leds) / 2)):
-        leds[i].toggle()
-        sleep(.07)
-    reversed *= -1
+    for _ in range(5):
+        animation(range(len(leds) -1, -1, -1), .035)
+        animation(range(len(leds)), .035)
 
-try:
-    while True:
-       other()
-except KeyboardInterrupt:
-    [led.off() for led in leds]
-    print("See ya later, RPi Pico!")
+def rapidBurstEffectRight():
+    animationTwo(range(len(leds) -1, -1, -1), (-1, -1), .025)
+    animationTwo(range(len(leds)), (-1, -1), .025)
+
+def rapidBurstEffectLeft():
+    animationTwo(range(len(leds)), (len(leds), 1), .025)
+    animationTwo(range(len(leds) -1, -1, -1), (len(leds), 1), .025)
+
+def main():
+    try:
+        while True:
+            rapidBurstEffectLeft()
+            larsonScanner()
+            rapidBurstEffectRight()
+#             other()
+    except KeyboardInterrupt:
+        [led.off() for led in leds]
+        print("See ya later, RPi Pico!")
+
+main()
