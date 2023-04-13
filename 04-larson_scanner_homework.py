@@ -18,6 +18,14 @@ def animationTwo(firstRange: range, secondRangeArgs, delay: float):
             sleep(delay)
             leds[j].off()
 
+def animationThree():
+    for i in range(int(len(leds) / 2), len(leds), 1):
+        for j in range(i, len(leds), 1):
+            leds[i].on()
+            leds[len(leds) -1 - i].on()
+            sleep(i * j ** -2.5)
+        
+
 def larsonScanner():
     for _ in range(5):
         animation(range(len(leds) -1, -1, -1), .035)
@@ -34,10 +42,13 @@ def rapidBurstEffectLeft():
 def main():
     try:
         while True:
+            animationThree()
+#             animationTwo(range(int(len(leds) / 2)), (int(len(leds) / 2), 1), .025)
+#             animationTwo(range(int(len(leds) / 2) -1, -1, -1), (-1, -1), .025)
+#             animationTwo(range(int(len(leds) / 2) -1, -1, -1), (-1, -1), .025)
             rapidBurstEffectLeft()
             larsonScanner()
             rapidBurstEffectRight()
-#             other()
     except KeyboardInterrupt:
         [led.off() for led in leds]
         print("See ya later, RPi Pico!")
