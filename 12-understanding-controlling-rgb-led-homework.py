@@ -46,7 +46,7 @@ class Lesson12HW:
 if __name__ == "__main__":
     try:
         homework = Lesson12HW(
-            myPWMLeds = [MyPWM(n) for n in [16, 17, 18]],
+            myPWMLeds = [MyPWM(n) for n in [16, 18, 19]],
             colors = {
                 "red": Color(65535),
                 "green": Color(g = 65535),
