@@ -9,7 +9,7 @@
 #     ----------- = - ----- =
 #     (0 - 65535)     65535
 #
-
+#        y 
 #            |
 # (0, 65535) |---------------------*
 #            |      /              |
@@ -39,31 +39,18 @@ class MyPWM(PWM):
         self.duty_u16(duty_u16)
 
 pots = [ADC(n) for n in [26, 27, 28]]
-leds = [MyPWM(n) for n in [16, 18, 19]]
-timer = Timer(mode = Timer.PERIODIC, period = 200, callback = lambda t:print(f"(0) r: {65535 -1 * pots[0].read_u16()} g: {65535 -1 * pots[1].read_u16()} b: {65535 -1 * pots[2].read_u16()}"))
-# timer = Timer(mode = Timer.PERIODIC, period = 250, callback = lambda t:print(f"(1) r: {MAP(pots[0].read_u16(), 0, 65535, 65535, 0)} g: {MAP(pots[1].read_u16(), 0, 65535, 65535, 0)} b: {MAP(pots[2].read_u16(), 0, 65535, 65535, 0)}"))
-# timer = Timer(mode = Timer.PERIODIC, period = 200, callback = lambda t:print(f"(2) r: {pots[0].read_u16()} g: {pots[1].read_u16()} b: {pots[2].read_u16()}"))
-   
-def MAP(x, in_min, in_max, out_min, out_max):
-    return int((x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
+leds = [MyPWM(n) for n in [16, 17, 18]]
+# timer = Timer(mode = Timer.PERIODIC, period = 200, callback = lambda t:print(f"r: {65535 -1 * pots[0].read_u16()} g: {65535 -1 * pots[1].read_u16()} b: {65535 -1 * pots[2].read_u16()}"))
+timer = Timer(
+    mode = Timer.PERIODIC,
+    period = 200,
+    callback = lambda t:print(f"r: {65535 if pots[0].read_u16() >= 65400 else 0 if pots[0].read_u16() < 550 else pots[0].read_u16()} g: {65535 if pots[1].read_u16() >= 65400 else 0 if pots[1].read_u16() < 550 else pots[1].read_u16()} b: {65535 if pots[2].read_u16() >= 65400 else 0 if pots[2].read_u16() < 550 else pots[2].read_u16()}")
+)
 
 def main():
     while True:
-#         print(MAP(pots[0].read_u16(), 0, 65535, 65535, 0), end = " ")
-#         print(MAP(pots[1].read_u16(), 0, 65535, 65535, 0), end = " ")
-#         print(MAP(pots[2].read_u16(), 0, 65535, 65535, 0))
-#         sleep(.25)
         for i in range(len(leds)):
-            leds[i].duty_u16(65535 -1 * pots[i].read_u16())
-            #leds[i].duty_u16(MAP(pots[i].read_u16(), 0, 65535, 65535, 0))
-            #leds[i].duty_u16(pots[i].read_u16())
-            
-#         podsVal[0] = pots[0].read_u16()
-#         podsVal[1] = pots[1].read_u16()
-#         podsVal[2] = pots[2].read_u16()
-#         leds[0].duty_u16(0 if redPodVal < 300 else redPodVal)
-#         leds[1].duty_u16(pots[1].read_u16())
-#         leds[2].duty_u16(pots[2].read_u16())
+            leds[i].duty_u16(65535 -1 * (65535 if pots[i].read_u16() >= 65400 else 0 if pots[i].read_u16() < 400 else pots[i].read_u16()))
 try:
     main()
 except KeyboardInterrupt:
