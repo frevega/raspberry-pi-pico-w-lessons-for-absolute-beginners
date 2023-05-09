@@ -1,22 +1,10 @@
-from machine import Pin, PWM
 from time import sleep
-
-class MyPWM(PWM):
-    def __init__(self, pinNumber: int, freq: int = 1000, duty_u16: uint16 = 0):
-        super().__init__(Pin(pinNumber))
-        self.freq(freq)
-        self.duty_u16(duty_u16)
-
-class Color:
-    def __init__(self, r: int = 0, g: int = 0, b: int = 0):
-        self.r = r
-        self.g = g
-        self.b = b
+from MyLib import MyColor, MyPWM
 
 class Lesson12HW:
     selectedColor: str = None
     
-    def __init__(self, myPWMLeds: list[MyPWM], colors: dict[str: Color], validColors: list[str]):
+    def __init__(self, myPWMLeds: list[MyPWM], colors: dict[str: MyColor], validColors: list[str]):
         self.leds = myPWMLeds
         self.colors = colors
         self.validColors = validColors
@@ -27,7 +15,7 @@ class Lesson12HW:
             self.leds[1].duty_u16(self.colors[key].g)
             self.leds[2].duty_u16(self.colors[key].b)
             print(key)
-            sleep(1.2)
+            sleep(2)
             if index == len(self.colors) -1:
                 [led.duty_u16(0) for led in self.leds]
                 print("\ncolorCheck(): done!")
@@ -46,16 +34,16 @@ class Lesson12HW:
 if __name__ == "__main__":
     try:
         homework = Lesson12HW(
-            myPWMLeds = [MyPWM(n) for n in [16, 18, 19]],
+            myPWMLeds = [MyPWM(n) for n in [16, 17, 18]],
             colors = {
-                "red": Color(65535),
-                "green": Color(g = 65535),
-                "blue": Color(b = 65535),
-                "cyan": Color(g = 65535, b = 65535),
-                "magenta": Color(65535, b = 65535),
-                "yellow": Color(65535, 25700),
-                "white": Color(65535, 65535, 65535),
-                "orange": Color(65535, 5000)
+                "red": MyColor(65535),
+                "green": MyColor(g = 65535),
+                "blue": MyColor(b = 65535),
+                "cyan": MyColor(g = 65535, b = 65535),
+                "magenta": MyColor(65535, b = 65535),
+                "yellow": MyColor(65535, 25700),
+                "white": MyColor(65535, 65535, 65535),
+                "orange": MyColor(65535, 5000)
             },
             validColors = ["red", "green", "blue", "cyan", "magenta", "yellow", "white", "orange"]
         )
