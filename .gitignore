@@ -1,0 +1,5 @@
+.DS_Store
+.micropico
+secrets.py
+__pycache__
+.vscode
