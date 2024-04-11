@@ -1,7 +1,7 @@
-from machine import ADC, Pin, PWM, Timer
+from machine import ADC, Pin, Timer
+from MyLib import MyPWM
 
-servo = PWM(Pin(15))
-servo.freq(50)
+servo = MyPWM(pinNumber = 15, freq = 50)
 pot_pin = ADC(28)
 Pin(23, Pin.OUT, value = 1)
 
